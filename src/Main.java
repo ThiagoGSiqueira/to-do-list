@@ -1,5 +1,6 @@
-import database.ConnectionFactory;
-import resources.db.DatabaseConfig;
+import dao.ITaskDAO;
+import dao.TaskDAO;
+import model.Task;
 
 import java.sql.SQLException;
 
