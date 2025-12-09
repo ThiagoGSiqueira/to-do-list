@@ -2,7 +2,9 @@ package model;
 
 import enums.TaskStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Task {
     private int idTask;
@@ -12,18 +14,28 @@ public class Task {
     private TaskStatus taskStatus;
     private LocalDateTime completedAt;
 
+    public Task(int idTask, String taskTitle, String taskDescription, LocalDateTime startedAt, TaskStatus taskStatus, LocalDateTime completedAt) {
+        this.idTask = idTask;
+        this.taskTitle = taskTitle;
+        this.taskDescription = taskDescription;
+        this.startedAt = startedAt;
+        this.taskStatus = taskStatus;
+        if (completedAt == null) {
+
+        } else {
+            this.completedAt = completedAt;
+        }
+    }
+
     public Task(String taskTitle, String taskDescription) {
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
         this.startedAt = LocalDateTime.now();
         this.taskStatus = TaskStatus.PENDING;
         this.completedAt = null;
+        this.idTask = 0;
     }
 
-    public Task(String taskTitle, String taskDescription, int idTask) {
-        this(taskTitle, taskDescription);
-        this.idTask = idTask;
-    }
 
     public void maskAsDone() {
         this.taskStatus = TaskStatus.DONE;
