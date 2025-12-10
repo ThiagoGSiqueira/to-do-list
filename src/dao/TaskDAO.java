@@ -1,13 +1,11 @@
 package dao;
 
 import database.ConnectionFactory;
-import enums.TaskStatus;
 import exceptions.DataAcessException;
 import model.Task;
 import util.TaskMapper;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +15,22 @@ public class TaskDAO implements ITaskDAO {
     public int save(Task task) {
         String sql = "INSERT INTO tasks (task_title, task_description, started_at, task_status)  VALUES (?, ?, ?, ?)";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             Timestamp startedAt = Timestamp.valueOf(task.getStartedAt());
             ps.setString(1, task.getTaskTitle());
             ps.setString(2, task.getTaskDescription());
             ps.setTimestamp(3, startedAt);
             ps.setString(4, task.getTaskStatus().toString());
 
-            return ps.executeUpdate();
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+
+            while(rs.next()) {
+                task.setIdTask(rs.getInt(1));
+                return rs.getInt(1);
+            }
+            return 0;
         } catch (SQLException e) {
             throw new DataAcessException("Erro ao criar a tarefa! " + e);
         }

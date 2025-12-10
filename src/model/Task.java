@@ -47,6 +47,10 @@ public class Task {
         return idTask;
     }
 
+    public void setIdTask(int idTask) {
+        this.idTask = idTask;
+    }
+
     public String getTaskTitle() {
         return taskTitle;
     }
