@@ -1,14 +1,14 @@
 package view;
 
 import enums.TaskOptions;
-import enums.TaskStatus;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuView {
-    Scanner sc = new Scanner(System.in);
+    public static final Scanner sc = new Scanner(System.in);
 
-    public TaskOptions run() {
+    public TaskOptions render() {
         System.out.println("1 - Criar nova tarefa.");
         System.out.println("2 - Atualizar tarefa.");
         System.out.println("3 - Buscar tarefas");
@@ -16,18 +16,24 @@ public class MenuView {
         System.out.println("5 - Remover tarefa.");
         System.out.println("6 - Completar tarefa");
 
-        int choice = sc.nextInt();
-        return switch (choice) {
-            case 1 -> TaskOptions.CREATE_TASK;
-            case 2 -> TaskOptions.UPDATE_TASK;
-            case 3 -> TaskOptions.FIND_ALL_TASKS;
-            case 4 -> TaskOptions.FIND_TASK_BY_ID;
-            case 5 -> TaskOptions.REMOVE_TASK;
-            case 6 -> TaskOptions.COMPLETE_TASK;
-            default -> {
-                System.out.println("Opção inválida.");
-                yield null;
-            }
-        };
+        try {
+            int choice = sc.nextInt();
+            return switch (choice) {
+                case 1 -> TaskOptions.CREATE_TASK;
+                case 2 -> TaskOptions.UPDATE_TASK;
+                case 3 -> TaskOptions.FIND_ALL_TASKS;
+                case 4 -> TaskOptions.FIND_TASK_BY_ID;
+                case 5 -> TaskOptions.REMOVE_TASK;
+                case 6 -> TaskOptions.COMPLETE_TASK;
+                default -> {
+                    System.out.println("Escolha uma opção válida.");
+                    yield TaskOptions.INVALID_OPTION;
+                }
+            };
+        } catch (InputMismatchException e) {
+            System.out.println("Escolha uma opção válida.");
+            sc.nextLine();
+            return TaskOptions.INVALID_OPTION;
+        }
     }
 }
