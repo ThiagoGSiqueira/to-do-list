@@ -26,13 +26,13 @@ public class TaskDAO implements ITaskDAO {
 
             ResultSet rs = ps.getGeneratedKeys();
 
-            while(rs.next()) {
+            if(rs.next()) {
                 task.setIdTask(rs.getInt(1));
                 return rs.getInt(1);
             }
             return 0;
         } catch (SQLException e) {
-            throw new DataAcessException("Erro ao criar a tarefa! " + e);
+            throw new DataAcessException("Erro ao criar a tarefa! ", e);
         }
     }
 
@@ -48,7 +48,7 @@ public class TaskDAO implements ITaskDAO {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAcessException("Erro ao atualizar a tarefa! " + e);
+            throw new DataAcessException("Erro ao atualizar a tarefa! ", e);
         }
     }
 

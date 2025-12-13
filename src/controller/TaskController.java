@@ -1,19 +1,15 @@
 package controller;
 
 import enums.TaskOptions;
-import exceptions.DataAcessException;
-import model.Task;
-import service.TaskService;
 import view.*;
-
-import java.util.List;
+import view.feedback.*;
 
 public class TaskController {
 
-    TaskService taskService;
+    private final TaskCommandHandler taskCommandHandler;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
+    public TaskController(TaskCommandHandler taskCommandHandler) {
+        this.taskCommandHandler = taskCommandHandler;
     }
 
     public void run() {
@@ -25,12 +21,12 @@ public class TaskController {
             TaskOptions taskOptions = menuView.render();
 
             switch (taskOptions) {
-                case CREATE_TASK -> handleCreateTask();
-                case UPDATE_TASK -> handleUpdateTask();
-                case FIND_ALL_TASKS -> handleFindAll();
-                case FIND_TASK_BY_ID -> handleFindTaskById();
-                case REMOVE_TASK -> handleRemoveTaskById();
-                case COMPLETE_TASK -> handleCompleteTaskById();
+                case CREATE_TASK -> taskCommandHandler.handleCreateTask();
+                case UPDATE_TASK -> taskCommandHandler.handleUpdateTask();
+                case FIND_ALL_TASKS -> taskCommandHandler.handleFindAll();
+                case FIND_TASK_BY_ID -> taskCommandHandler.handleFindTaskById();
+                case REMOVE_TASK -> taskCommandHandler.handleRemoveTaskById();
+                case COMPLETE_TASK -> taskCommandHandler.handleCompleteTaskById();
                 case EXIT -> running = false;
                 case INVALID_OPTION -> {
                 }
@@ -38,46 +34,4 @@ public class TaskController {
         }
     }
 
-    private void handleCreateTask() {
-        TaskFormView taskFormView = new TaskFormView();
-        Task task = taskFormView.render();
-        taskService.createTask(task);
-    }
-
-    private void handleUpdateTask() {
-
-        TaskFormView taskFormView = new TaskFormView();
-        IdInputView idInputView = new IdInputView();
-        int idTask = idInputView.getTaskId();
-        Task task = taskFormView.render();
-
-        taskService.updateTaskById(idTask, task);
-
-    }
-
-    public void handleFindAll() {
-        ListAllTasksView listAllTasksView = new ListAllTasksView();
-        List<Task> tasks = taskService.findAll();
-        listAllTasksView.render(tasks);
-    }
-
-    public void handleFindTaskById() {
-        TaskDetailsView taskDetailsView = new TaskDetailsView();
-        IdInputView idInputView = new IdInputView();
-        int idTask = idInputView.getTaskId();
-        Task task = taskService.findById(idTask);
-        taskDetailsView.render(task);
-    }
-
-    public void handleRemoveTaskById() {
-        IdInputView idInputView = new IdInputView();
-        int idTask = idInputView.getTaskId();
-        taskService.removeTaskById(idTask);
-    }
-
-    public void handleCompleteTaskById() {
-        IdInputView idInputView = new IdInputView();
-        int idTask = idInputView.getTaskId();
-        taskService.completeTaskById(idTask);
-    }
 }
