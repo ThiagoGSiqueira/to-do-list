@@ -10,14 +10,12 @@ import java.util.List;
 
 public class TaskService {
 
-    ITaskDAO taskDAO;
-    TaskValidatorService taskValidator = new TaskValidatorService();
-    public TaskService() {
-        taskDAO = new TaskDAO();
-    }
+    private final ITaskDAO taskDAO;
+    private final TaskValidatorService taskValidator;
 
-    public TaskService(ITaskDAO taskDAO) {
+    public TaskService(ITaskDAO taskDAO, TaskValidatorService taskValidator) {
         this.taskDAO = taskDAO;
+        this.taskValidator = taskValidator;
     }
 
     public void createTask(Task task) {
