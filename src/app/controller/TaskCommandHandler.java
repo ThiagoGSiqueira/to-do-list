@@ -2,21 +2,27 @@ package app.controller;
 
 import app.exceptions.*;
 import app.model.Task;
+import app.ports.ITaskDetailsView;
+import app.ports.ITaskListView;
+import app.ports.IOutputMessage;
 import app.service.TaskService;
 import app.view.IdInputView;
-import app.view.ListAllTasksView;
-import app.view.TaskDetailsView;
 import app.view.TaskFormView;
-import app.view.feedback.*;
 
 import java.util.List;
 
 public class TaskCommandHandler {
 
     private final TaskService taskService;
+    private final IOutputMessage outputMessage;
+    private final ITaskListView taskListView;
+    private final ITaskDetailsView taskDetailsView;
 
-    public TaskCommandHandler(TaskService taskService) {
+    public TaskCommandHandler(TaskService taskService, IOutputMessage outputMessage, ITaskListView taskListView, ITaskDetailsView taskDetailsView) {
         this.taskService = taskService;
+        this.outputMessage = outputMessage;
+        this.taskListView = taskListView;
+        this.taskDetailsView = taskDetailsView;
     }
 
     protected void handleCreateTask() {
@@ -25,7 +31,7 @@ public class TaskCommandHandler {
             Task task = taskFormView.render();
             taskService.createTask(task);
 
-            new SuccessView().render(task.getIdTask(), "Tarefa criada com sucesso!");
+            outputMessage.displaySuccess("Tarefa criada com sucesso!");
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -41,7 +47,7 @@ public class TaskCommandHandler {
             taskService.updateTaskById(idTask, task);
             task.setIdTask(oldTask.getIdTask());
 
-            new SuccessView().render(task.getIdTask(), "Tarefa atualizada com sucesso!");
+            outputMessage.displaySuccess("Tarefa atualizada com sucesso!");
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -49,9 +55,8 @@ public class TaskCommandHandler {
 
     protected void handleFindAll() {
         try {
-            ListAllTasksView listAllTasksView = new ListAllTasksView();
             List<Task> tasks = taskService.findAll();
-            listAllTasksView.render(tasks);
+            taskListView.display(tasks);
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -60,11 +65,10 @@ public class TaskCommandHandler {
 
     protected void handleFindTaskById() {
         try {
-            TaskDetailsView taskDetailsView = new TaskDetailsView();
             IdInputView idInputView = new IdInputView();
             int idTask = idInputView.getTaskId();
             Task task = taskService.findById(idTask);
-            taskDetailsView.render(task);
+            taskDetailsView.display(task);
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -75,7 +79,7 @@ public class TaskCommandHandler {
             IdInputView idInputView = new IdInputView();
             int idTask = idInputView.getTaskId();
             taskService.removeTaskById(idTask);
-            new SuccessView().render(idTask, "Tarefa removida com sucesso!");
+            outputMessage.displaySuccess("Tarefa removida com sucesso!");
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -86,7 +90,7 @@ public class TaskCommandHandler {
             IdInputView idInputView = new IdInputView();
             int idTask = idInputView.getTaskId();
             taskService.completeTaskById(idTask);
-            new SuccessView().render(idTask, "Tarefa completa com sucesso!");
+            outputMessage.displaySuccess("Tarefa marcada como concluída com sucesso!");
         } catch (Exception e) {
             handleErrors(e);
         }
@@ -94,17 +98,17 @@ public class TaskCommandHandler {
 
     private void handleErrors(Exception e) {
         if (e instanceof DataAcessException) {
-            new DataErrorView().render();
+            outputMessage.displayError("Houve um erro ao se conectar com o banco de dados. Por favor, aguarde até que seja reestabelecido.");
         } else if (e instanceof TaskNotFoundException) {
-            new TaskNotFoundView().render();
+            outputMessage.displayError("Tarefa não encontrada!");
         } else if (e instanceof TitleTooLongException) {
-            new TitleTooLongView().render();
+            outputMessage.displayError("Seu título é muito longo. Por favor, use menos de 30 caracteres.");
         } else if (e instanceof EmptyDataException) {
-            new EmptyDataView().render();
+            outputMessage.displayError("Todos os campos tem que ser preenchidos!");
         } else if (e instanceof EmptyListException) {
-            new EmptyListView().render();
+            outputMessage.displayError("Nenhuma tarefa encontrada!");
         } else if (e instanceof TaskAlreadyDoneException) {
-            new TaskAlreadyDoneView().render();
+            outputMessage.displayWarning("Tarefa já foi concluída");
         }
     }
 }

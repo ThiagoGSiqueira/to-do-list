@@ -2,7 +2,7 @@ package app.view;
 
 import app.model.Task;
 
-public class TaskItemView {
+public class TaskItemView{
     public void render(Task task) {
         System.out.println(task.getIdTask());
         System.out.println(task.getTaskTitle());
