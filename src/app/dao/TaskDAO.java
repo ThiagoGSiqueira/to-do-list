@@ -61,7 +61,6 @@ public class TaskDAO implements ITaskDAO {
             List<Task> tasks = new ArrayList<>();
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 tasks.add(TaskMapper.mapToTask(rs));
             }

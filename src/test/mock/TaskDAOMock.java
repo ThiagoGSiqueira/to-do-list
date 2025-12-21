@@ -4,6 +4,7 @@ import app.dao.ITaskDAO;
 import app.enums.TaskStatus;
 import app.model.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class TaskDAOMock implements ITaskDAO {
         for (Task t : tasks) {
             if (t.getIdTask() == idTask) {
                 t.setTaskStatus(TaskStatus.DONE);
+                t.setCompletedAt(LocalDateTime.now());
                 return 1;
             }
         }

@@ -1,1 +1,10 @@
 src/app/resources/db/db.properties
+
+*.class
+out/
+bin/
+
+.idea/
+*.iml
+
+*.log

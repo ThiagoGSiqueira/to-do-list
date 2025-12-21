@@ -7,16 +7,26 @@ O objetivo principal é criar uma aplicação de linha de comando robusta, aplic
 ## 🎯 Objetivo Arquitetural
 
 A arquitetura do projeto é construída com foco em:
-* **Desacoplamento:** Separação clara de responsabilidades entre as camadas (Controller, Handler, Service, DAO).
-* **Testabilidade:** Uso de Injeção de Dependência (DI) via `ApplicationFactory` para isolar componentes.
-* **Persistência:** Utilização de JDBC puro para conexão com MySQL.
+* 🧩 **Desacoplamento:** Separação clara de responsabilidades entre as camadas (Controller, Handler, Service, DAO).
+* 🧪 **Testabilidade:** Uso de Injeção de Dependência (DI) via `ApplicationFactory` para isolar componentes.
+* 🗄️ **Persistência:** Utilização de JDBC puro para conexão com MySQL.
 
 ---
 
-## 💡 Status Atual
-
-Funcionalidade de gerenciamento de tarefas (CRUD) em fase final de implementação e refatoração arquitetural.
-
 ## 🛠️ Como Executar
 
-A documentação detalhada dos passos para compilar e executar a aplicação (incluindo requisitos de MySQL e Driver JDBC) será finalizada após o teste de inicialização manual em um ambiente limpo.
+### 📋 Pré-requisitos
+* ☕ **Java JDK 21** ou superior.
+* 💻 **IDE** de sua preferência (IntelliJ IDEA, VS Code, Eclipse).
+* 🔌 **MySQL ConnectorJ** (Caso queira utilizar o banco de dados real).
+
+### 🗄️ Opção 1: Execução com MySQL
+* 📜 Crie o banco de dados usando o script localizado em `src/app/database/sql`.
+* 📦 Adicione o arquivo `.jar` do MySQL connector às bibliotecas do seu projeto na IDE.
+* 🔑 Em `resources/db` altere o nome do arquivo `db.properties.example` para `db.properties`.
+* ✍️ Insira suas credenciais do banco de dados.
+* ▶️ Execute a classe `Main.java`.
+
+### 🃏 Opção 2: Execução em Modo Mock (Sem banco de dados)
+* ✨ Graças à arquitetura desacoplada (Inversão de dependência), você pode rodar o sistema sem precisar instalar o MySQL.
+* ▶️ Execute a classe `TestRunner`.

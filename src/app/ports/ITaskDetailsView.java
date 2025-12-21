@@ -3,5 +3,5 @@ package app.ports;
 import app.model.Task;
 
 public interface ITaskDetailsView {
-    void display(Task task);
+    void display(Task task) throws InterruptedException;
 }

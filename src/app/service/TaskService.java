@@ -30,7 +30,7 @@ public class TaskService {
     public List<Task> findAll() {
         List<Task> tasks = taskDAO.findAll();
         taskValidator.validateEmptyList(tasks);
-        return  tasks;
+        return tasks;
     }
 
     public Task findById(int idTask) {
