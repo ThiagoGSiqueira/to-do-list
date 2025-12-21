@@ -13,6 +13,14 @@ A arquitetura do projeto é construída com foco em:
 
 ---
 
+## 📥 Instalação
+
+1. Clone o repositório em sua máquina local:
+   ```bash
+   git clone [https://github.com/ThiagoGSiqueira/to-do-list.git](https://github.com/ThiagoGSiqueira/to-do-list.git)
+
+---
+
 ## 🛠️ Como Executar
 
 ### 📋 Pré-requisitos
